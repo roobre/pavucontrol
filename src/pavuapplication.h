@@ -34,7 +34,6 @@ public:
     /* options */
     bool retry;
     bool maximize;
-    gint32 tab;
     bool version;
 
 protected:

@@ -35,7 +35,6 @@ PavuApplication::PavuApplication() :
     mainWindow(NULL),
     retry(false),
     maximize(false),
-    tab(0),
     version(false),
     m(NULL) {
 }
@@ -49,7 +48,7 @@ MainWindow* PavuApplication::create_window()
     m = pa_glib_mainloop_new(g_main_context_default());
     g_assert(m);
 
-    MainWindow* pavucontrol_window = pavucontrol_get_window(m, maximize, retry, tab);
+    MainWindow* pavucontrol_window = pavucontrol_get_window(m, maximize, retry);
 
     pavucontrol_window->signal_hide().connect(
                      sigc::bind<Gtk::Window*>(sigc::mem_fun(*this,
@@ -72,9 +71,6 @@ void PavuApplication::on_activate()
 
         /* and register it in the Gtk::Application */
         add_window(*mainWindow);
-    } else if (tab != -1) {
-        /* We are, and a specific tab has been requested. Select it. */
-        mainWindow->selectTab(tab);
     }
 
     /* Present the main window. */
@@ -118,7 +114,6 @@ int on_command_line(const Glib::RefPtr<Gio::ApplicationCommandLine>& command_lin
 {
     const auto options = command_line->get_options_dict();
 
-    get_arg_value(options, "tab", app->tab);
     get_arg_value(options, "retry", app->retry);
     get_arg_value(options, "maximize", app->maximize);
     get_arg_value(options, "version", app->version);
@@ -147,12 +142,6 @@ int main(int argc, char *argv[]) {
 
     /* Add command-line options */
     app.add_main_option_entry(
-        Gio::Application::OptionType::OPTION_TYPE_INT,
-        "tab", 't',
-        _("Select a specific tab on load."),
-        _("number"));
-
-    app.add_main_option_entry(
         Gio::Application::OptionType::OPTION_TYPE_BOOL,
         "retry", 'r',
         _("Retry forever if pa quits (every 5 seconds)."));
@@ -176,8 +165,7 @@ int main(int argc, char *argv[]) {
      * In the first launched instance, this will return when its window is
      * closed. In subsequently launches instances, this will only signal the
      * first instance to handle a new request, and exit immediately.
-     * Handling a new request consists of presenting the existing window (and
-     * optionally, select a tab).
+     * Handling a new request consists of presenting the existing window.
      */
     return app.run(argc, argv);
 }

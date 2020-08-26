@@ -62,14 +62,11 @@ public:
     void removeSourceOutput(uint32_t index);
     void removeClient(uint32_t index);
 
-    void selectBestTab();
-    void selectTab(int tab_number);
-
     void removeAllWidgets();
 
     void setConnectingMessage(const char *string = NULL);
 
-    Gtk::Notebook *notebook;
+    Gtk::Box *notebook;
     Gtk::VBox *streamsVBox, *recsVBox, *sinksVBox, *sourcesVBox, *cardsVBox;
     Gtk::Label *noStreamsLabel, *noRecsLabel, *noSinksLabel, *noSourcesLabel, *noCardsLabel, *connectingLabel;
     Gtk::ComboBox *sinkInputTypeComboBox, *sourceOutputTypeComboBox, *sinkTypeComboBox, *sourceTypeComboBox;

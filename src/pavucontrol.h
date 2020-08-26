@@ -74,5 +74,5 @@ enum SourceType {
 pa_context* get_context(void);
 void show_error(const char *txt);
 
-MainWindow* pavucontrol_get_window(pa_glib_mainloop *m, bool maximize, bool retry, int tab_number);
+MainWindow* pavucontrol_get_window(pa_glib_mainloop *m, bool maximize, bool retry);
 #endif

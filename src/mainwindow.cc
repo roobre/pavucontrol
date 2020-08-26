@@ -204,20 +204,6 @@ bool MainWindow::on_key_press_event(GdkEventKey* event) {
 
     if (event->state & GDK_CONTROL_MASK) {
         switch (event->keyval) {
-            case GDK_KEY_KP_1:
-            case GDK_KEY_KP_2:
-            case GDK_KEY_KP_3:
-            case GDK_KEY_KP_4:
-            case GDK_KEY_KP_5:
-                notebook->set_current_page(event->keyval - GDK_KEY_KP_1);
-                return true;
-            case GDK_KEY_1:
-            case GDK_KEY_2:
-            case GDK_KEY_3:
-            case GDK_KEY_4:
-            case GDK_KEY_5:
-                notebook->set_current_page(event->keyval - GDK_KEY_1);
-                return true;
             case GDK_KEY_W:
             case GDK_KEY_Q:
             case GDK_KEY_w:
@@ -337,22 +323,6 @@ static void updatePorts(DeviceWidget *w, std::map<Glib::ustring, PortInfo> &port
         p = it->second;
         w->setLatencyOffset(p.latency_offset);
     }
-}
-
-void MainWindow::selectBestTab() {
-    if (sinkInputWidgets.size() > 0)
-        notebook->set_current_page(0);
-    else if (sourceOutputWidgets.size() > 0)
-        notebook->set_current_page(1);
-    else if (sourceWidgets.size() > 0 && sinkWidgets.size() == 0)
-        notebook->set_current_page(3);
-    else
-        notebook->set_current_page(2);
-}
-
-void MainWindow::selectTab(int tab_number) {
-    if (tab_number > 0 && tab_number <= notebook->get_n_pages())
-        notebook->set_current_page(tab_number - 1);
 }
 
 void MainWindow::updateCard(const pa_card_info &info) {

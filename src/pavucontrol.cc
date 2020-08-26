@@ -44,7 +44,6 @@
 static pa_context* context = NULL;
 static pa_mainloop_api* api = NULL;
 static int n_outstanding = 0;
-static int tab_number = 0;
 static bool retry = false;
 static int reconnect_timeout = 1;
 
@@ -166,16 +165,6 @@ void source_output_cb(pa_context *, const pa_source_output_info *i, int eol, voi
     }
 
     if (eol > 0)  {
-
-        if (n_outstanding > 0) {
-            /* At this point all notebook pages have been populated, so
-             * let's open one that isn't empty */
-            if (tab_number != 0) {
-                w->selectTab(tab_number);
-            } else {
-                w->selectBestTab();
-            }
-        }
 
         dec_outstanding(w);
         return;
@@ -625,11 +614,10 @@ gboolean connect_to_pulse(gpointer userdata) {
     return false;
 }
 
-MainWindow* pavucontrol_get_window(pa_glib_mainloop *m, bool maximize, bool _retry, int _tab_number) {
+MainWindow* pavucontrol_get_window(pa_glib_mainloop *m, bool maximize, bool _retry) {
 
     MainWindow* mainWindow = NULL;
 
-    tab_number = _tab_number;
     retry = _retry;
 
     ca_context_set_driver(ca_gtk_context_get(), "pulse");
